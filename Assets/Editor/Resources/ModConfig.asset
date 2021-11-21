@@ -14,7 +14,8 @@ MonoBehaviour:
   id: faceOff
   title: Face Off
   author: TasThing
-  description: 
+  description: Let's face the facts and have a face to face. Put on our game faces
+    in the face of danger.
   version: 1.0
   outputFolder: build
-  previewImage: {fileID: 0}
+  previewImage: {fileID: 2800000, guid: aebf6d74d32be5d44a8f9b6e798c5dd3, type: 3}
