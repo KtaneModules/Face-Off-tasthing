@@ -103,9 +103,11 @@ public class faceOff : MonoBehaviour
         Debug.LogFormat("[Face Off #{0}] The full rearranged alphabet is {1}.", moduleId, rearrangedAlphabet.Join(""));
 
         mismatchedPosition = rnd.Range(0, 26);
-        fakeLetter = alphabet.Where(ch => Array.IndexOf(rearrangedAlphabet, ch) != mismatchedPosition).PickRandom();
+        fakeLetter = alphabet.PickRandom();
         if (Math.Abs(alphabet.IndexOf(fakeLetter) - alphabet.IndexOf(rearrangedAlphabet[mismatchedPosition])) % 2 != 0)
             mismatchedPosition = (mismatchedPosition + 1) % 26;
+        if (rearrangedAlphabet[mismatchedPosition] == fakeLetter)
+            mismatchedPosition = (mismatchedPosition + 2) % 26;
         var secondarySymbolSet = new bool[26];
         for (int i = 0; i < 26; i++)
             secondarySymbolSet[i] = rnd.Range(0, 2) == 0;
