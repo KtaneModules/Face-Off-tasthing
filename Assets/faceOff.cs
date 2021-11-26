@@ -103,7 +103,7 @@ public class faceOff : MonoBehaviour
         Debug.LogFormat("[Face Off #{0}] The full rearranged alphabet is {1}.", moduleId, rearrangedAlphabet.Join(""));
 
         mismatchedPosition = rnd.Range(0, 26);
-        fakeLetter = alphabet.PickRandom();
+        fakeLetter = alphabet.Where(ch => Array.IndexOf(rearrangedAlphabet, ch) != mismatchedPosition).PickRandom();
         if (Math.Abs(alphabet.IndexOf(fakeLetter) - alphabet.IndexOf(rearrangedAlphabet[mismatchedPosition])) % 2 != 0)
             mismatchedPosition = (mismatchedPosition + 1) % 26;
         var secondarySymbolSet = new bool[26];
@@ -119,7 +119,7 @@ public class faceOff : MonoBehaviour
             var str = i != mismatchedPosition ? rearrangedAlphabet[i].ToString() : fakeLetter.ToString();
             str += secondarySymbolSet[i] ? "2" : "1";
             if (!triangularFaces.Contains(i) && shrinkTheseOnese.Contains(str))
-                faceSymbols[i].transform.localScale = new Vector3(.5f, .5f, .5f);
+                faceSymbols[i].transform.localScale = new Vector3(.45f, .45f, .45f);
         }
         Debug.LogFormat("[Face Off #{0}] Where a symbol corresponding to {1} should be displayed, one that corresponds to {2} can be found instead.", moduleId, rearrangedAlphabet[mismatchedPosition], fakeLetter);
         var average = (alphabet.IndexOf(fakeLetter) + alphabet.IndexOf(rearrangedAlphabet[mismatchedPosition])) / 2;
