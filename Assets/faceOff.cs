@@ -54,8 +54,7 @@ public class faceOff : MonoBehaviour
                     mainRef = null;
                 }
                 mainRef = audio.HandlePlayGameSoundAtTransformWithRef(KMSoundOverride.SoundEffect.BigButtonPress, button.transform);
-                if (!moduleSolved)
-                    StartCoroutine(Rotate(ix));
+                StartCoroutine(Rotate(ix));
                 return false;
             };
             button.OnInteractEnded += delegate
