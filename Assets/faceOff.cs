@@ -34,6 +34,8 @@ public class faceOff : MonoBehaviour
     private static readonly string[] colorNames = new[] { "cyan", "yellow", "magenta" };
     private static readonly string[] keywords = new[] { "SUCKLE", "FIDGET", "KNIGHT", "RINSED", "ALBINO", "SQUAWK", "KLUTZY", "DUVETS", "QUENCH" };
     private bool[] buttonsHeld = new bool[6];
+    private float degrees = 3f;
+    private bool TwitchPlaysActive;
 
     private static int moduleIdCounter = 1;
     private int moduleId;
@@ -69,6 +71,11 @@ public class faceOff : MonoBehaviour
             };
         }
         submitButton.OnInteract += delegate () { Submit(); return false; };
+        module.OnActivate += delegate ()
+        {
+            if (TwitchPlaysActive)
+                degrees = 1f;
+        };
     }
 
     private void Start()
@@ -89,7 +96,7 @@ public class faceOff : MonoBehaviour
         colorblindText.text = GetComponent<KMColorblindMode>().ColorblindModeActive ? buttonColorIndices.Select(x => "CYM"[x]).Join("") : "";
 
         var keyword = keywords[buttonColorIndices[0] * 3 + buttonColorIndices[1]];
-        Debug.LogFormat("[Face Off #{0}] The keyword is {1}.", moduleId, keyword[0] + keyword.Substring(1).ToLowerInvariant());
+        Debug.LogFormat("[Face Off #{0}] The keyword is \"{1}\".", moduleId, keyword[0] + keyword.Substring(1).ToLowerInvariant());
         var alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
         var restOfTheAlphabet = new string(alphabet.Where(c => !keyword.Contains(c)).ToArray());
         if (bomb.GetSerialNumberNumbers().First() % 2 == 0)
@@ -102,11 +109,7 @@ public class faceOff : MonoBehaviour
         Debug.LogFormat("[Face Off #{0}] The full rearranged alphabet is {1}.", moduleId, rearrangedAlphabet.Join(""));
 
         mismatchedPosition = rnd.Range(0, 26);
-        fakeLetter = alphabet.PickRandom();
-        if (Math.Abs(alphabet.IndexOf(fakeLetter) - alphabet.IndexOf(rearrangedAlphabet[mismatchedPosition])) % 2 != 0)
-            mismatchedPosition = (mismatchedPosition + 1) % 26;
-        if (rearrangedAlphabet[mismatchedPosition] == fakeLetter)
-            mismatchedPosition = (mismatchedPosition + 2) % 26;
+        fakeLetter = alphabet.Where(ch => rearrangedAlphabet[mismatchedPosition] != ch && rearrangedAlphabet[mismatchedPosition] % 2 == ch % 2).PickRandom();
         var secondarySymbolSet = new bool[26];
         for (int i = 0; i < 26; i++)
             secondarySymbolSet[i] = rnd.Range(0, 2) == 0;
@@ -137,22 +140,22 @@ public class faceOff : MonoBehaviour
             switch (ix)
             {
                 case 0:
-                    polyhedron.RotateAround(polyhedron.position, Vector3.back, 3);
+                    polyhedron.RotateAround(polyhedron.position, Vector3.back, degrees);
                     break;
                 case 1:
-                    polyhedron.RotateAround(polyhedron.position, Vector3.right, 3);
+                    polyhedron.RotateAround(polyhedron.position, Vector3.right, degrees);
                     break;
                 case 2:
-                    polyhedron.RotateAround(polyhedron.position, Vector3.down, 3);
+                    polyhedron.RotateAround(polyhedron.position, Vector3.down, degrees);
                     break;
                 case 3:
-                    polyhedron.RotateAround(polyhedron.position, Vector3.forward, 3);
+                    polyhedron.RotateAround(polyhedron.position, Vector3.forward, degrees);
                     break;
                 case 4:
-                    polyhedron.RotateAround(polyhedron.position, Vector3.left, 3);
+                    polyhedron.RotateAround(polyhedron.position, Vector3.left, degrees);
                     break;
                 case 5:
-                    polyhedron.RotateAround(polyhedron.position, Vector3.up, 3);
+                    polyhedron.RotateAround(polyhedron.position, Vector3.up, degrees);
                     break;
             }
             yield return null;
@@ -231,11 +234,11 @@ public class faceOff : MonoBehaviour
         {
             var holdCommands = new List<string[]>();
             var count = inputArray.Length / 2;
-            var times = new int[count];
+            var times = new float[count];
             for (int i = 0; i < count; i++)
                 holdCommands.Add(inputArray.Skip(2 * i).Take(2).ToArray());
             for (int i = 0; i < count; i++)
-                if (!validButtons.Contains(holdCommands[i][0]) || !int.TryParse(holdCommands[i][1], out times[i]))
+                if (!validButtons.Contains(holdCommands[i][0]) || !float.TryParse(holdCommands[i][1], out times[i]))
                     yield break;
             yield return null;
             for (int i = 0; i < count; i++)
