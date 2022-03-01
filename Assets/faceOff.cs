@@ -256,7 +256,11 @@ public class faceOff : MonoBehaviour
     private IEnumerator TwitchHandleForcedSolve()
     {
         while (!((int)bomb.GetTime() % values[0] == 0 ^ (int)bomb.GetTime() % values[1] == 0))
+        {
             yield return true;
+            yield return null;
+        }
+        yield return null;
         submitButton.OnInteract();
     }
 }
