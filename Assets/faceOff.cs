@@ -255,12 +255,12 @@ public class faceOff : MonoBehaviour
 
     private IEnumerator TwitchHandleForcedSolve()
     {
-        while (!(bomb.GetTime() % values[0] == 0 ^ bomb.GetTime() % values[1] == 0))
+        while (!((int)bomb.GetTime() % values[0] == 0 ^ (int)bomb.GetTime() % values[1] == 0))
         {
             yield return true;
             yield return null;
         }
-        yield return new WaitForSeconds(.1f);
+        yield return null;
         submitButton.OnInteract();
     }
 }
