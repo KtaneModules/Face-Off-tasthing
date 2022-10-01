@@ -35,7 +35,9 @@ public class faceOff : MonoBehaviour
     private static readonly string[] keywords = new[] { "SUCKLE", "FIDGET", "KNIGHT", "RINSED", "ALBINO", "SQUAWK", "KLUTZY", "DUVETS", "QUENCH" };
     private bool[] buttonsHeld = new bool[6];
     private float degrees = 3f;
+#pragma warning disable 0649
     private bool TwitchPlaysActive;
+#pragma warning restore 0649
 
     private static int moduleIdCounter = 1;
     private int moduleId;
@@ -202,7 +204,7 @@ public class faceOff : MonoBehaviour
 
     // Twitch Plays
 #pragma warning disable 414
-    private readonly string TwitchHelpMessage = "!{0} <C/U/R/W/D/L> # [Presses the rotation button with that label for # seconds, can be chained e.g. !{0} C 5 D 4] !{0} submit 58 [Presses the red button the next time the seconds digits of the timer are 58]";
+    private readonly string TwitchHelpMessage = "!{0} <C/U/R/W/D/L> # [Presses the rotation button with that label for # seconds, can be chained e.g. !{0} C 5 D 4] !{0} submit 1:58 [Presses the red button once the timer displays 1:58]";
 #pragma warning restore 414
 
     private IEnumerator ProcessTwitchCommand(string input)
@@ -210,23 +212,16 @@ public class faceOff : MonoBehaviour
         input = input.ToUpperInvariant().Trim();
         var inputArray = input.Split(' ');
         var validButtons = new[] { "C", "U", "R", "W", "D", "L" };
-        Match m = Regex.Match(input, @"^(?:submit (\d{1,2}))$", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
-        if (m.Success)
+        if (inputArray[0] == "SUBMIT" && inputArray.Length == 2)
         {
             yield return null;
-            var value = int.Parse(m.Groups[1].Value);
-            if (value >= 0 && value < 60)
+            Debug.Log(bomb.GetFormattedTime());
+            yield return "strike";
+            yield return "solve";
+            while (inputArray[1] != bomb.GetFormattedTime().TrimStart('0'))
             {
-                while ((int)bomb.GetTime() % 60 != value)
-                {
-                    yield return null;
-                    yield return "trycancel";
-                };
-            }
-            else
-            {
-                yield return "sendtochaterror Invalid time.";
-                yield break;
+                yield return null;
+                yield return "trycancel";
             }
             submitButton.OnInteract();
         }

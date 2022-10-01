@@ -14,9 +14,9 @@ MonoBehaviour:
   id: faceOff
   title: Face Off
   author: TasThing
-  description: "Let's face the facts and have a face to face. Put on our game faces
-    in the face of danger.\r\n\r\nModule idea and implementation by TasThing.\r\n\r\n[url=https://ktane.timwi.de/HTML/Face%20Off.html]Manual
+  description: "It's about bombs, it's about modules, we stay winning, we use solvers.\n\r\nModule
+    idea and implementation by TasThing.\r\n\r\n[url=https://ktane.timwi.de/HTML/Face%20Off.html]Manual
     HTML[/url]\r\n[url=https://ktane.timwi.de/PDF/Face%20Off.pdf]Manual PDF[/url]"
-  version: 1.0.5
+  version: 1.0.7
   outputFolder: build
   previewImage: {fileID: 2800000, guid: aebf6d74d32be5d44a8f9b6e798c5dd3, type: 3}
